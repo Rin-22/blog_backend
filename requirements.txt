@@ -7,3 +7,4 @@ Pillow
 python-decouple
 python-slugify
 wheel
+celery

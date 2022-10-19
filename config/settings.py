@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', cast=bool, default=True)
+DEBUG = config('DEBUG', cast=bool, default=False)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
 
@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'apps.account',
     'drf_yasg',
+    'rest_framework_simplejwt',
+    
 ]
 
 MIDDLEWARE = [
@@ -149,3 +151,19 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool) # вид соединения
 
 
 AUTH_USER_MODEL = 'account.User'
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT={
+    'USER_ID_FIELD': 'username',
+    'AUTH_HEADER_TYPES':('Bears', 'Token'),
+}
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'

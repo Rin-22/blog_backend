@@ -20,9 +20,23 @@ class RegistrationView(APIView):
             serializer.save()
             return  Response(
                 'Thanks for registration! Activate your via link in your mail',
-                status=status.HTTP_201_CREATED
+                status=status.HTTP_201_CREATED 
             )
 
-#TODO: активация, смена пароля, удаление аккаунта, востонавление пароля
-#TODO: подключить celery, redis
-#TODO: исправить HTML
+class AccountActivationView(APIView):
+    def get(self, request, activation_code):
+        user = User.objects.filter(activation_code=activation_code).first()
+        if not user:
+            return Response(
+                'Page not found',
+                status=status.HTTP_404_NOT_FOUND
+            )            
+        user.is_active=True
+        user.activation_code=''
+        user.save()
+        return Response(
+            'Account activated! You can login now',
+            status=status.HTTP_200_OK
+        )
+#TODO: смена пароля, удаление аккаунта, востонавление пароля
+
